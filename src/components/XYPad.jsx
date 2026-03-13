@@ -27,8 +27,6 @@ const XYPad = () => {
   const onMouseDown = (e) => {
     setIsDragging(true);
     handleMove(e);
-    // !测试代码记得删除
-    console.log(x, y);
   };
 
   useEffect(() => {

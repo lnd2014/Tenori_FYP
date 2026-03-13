@@ -55,17 +55,22 @@ class AudioEngine {
    */
 
 
-  // TODO 无法使用mapLin,尝试手写
+
   updateTimbre(x, y) {
-    // x: 0-1 (Q), y: 0-1 (Cutoff)
-    const cutoff = Tone.MathUtils.mapLin(y, 0, 1, 100, 8000);
-    const q = Tone.MathUtils.mapLin(x, 0, 1, 0.5, 15);
-    
+    // 手动映射数值 (避免 Tone.MathUtils 报错)
+    // 公式: value * (max - min) + min
+    const cutoff = y * (8000 - 100) + 100; // Y轴对应频率: 100Hz - 8000Hz
+    const q = x * (15 - 0.5) + 0.5;        // X轴对应共振: 0.5 - 15
+
+    // 更新当前音色缓存 (用于新音符的录入)
     this.currentTimbre = { cutoff, q };
-    
-    // Real-time update for the global filter
-    this.filter.frequency.rampTo(cutoff, 0.05);
-    this.filter.Q.rampTo(q, 0.05);
+
+    // 实时更新全局滤波器
+    // 确保 this.filter 已经正确连接到了 synth 和 destination
+    if (this.filter) {
+      this.filter.frequency.rampTo(cutoff, 0.05);
+      this.filter.Q.rampTo(q, 0.05);
+    }
   }
 
   playNote(noteIndex, timbre, time) {
