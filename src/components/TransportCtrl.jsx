@@ -1,0 +1,56 @@
+import React, { useState } from 'react';
+import { Play, Square, Activity } from 'lucide-react';
+import { engine } from '../services/AudioEngine';
+
+const TransportCtrl = ({ isPlaying, setIsPlaying }) => {
+    const [bpm, setBpm] = useState(120);
+
+    const togglePlay = () => {
+        if (isPlaying) {
+            engine.stop();
+        } else {
+            engine.start();
+        }
+        setIsPlaying(!isPlaying);
+    };
+
+    const handleBpmChange = (e) => {
+        const val = parseInt(e.target.value);
+        setBpm(val);
+        engine.setBpm(val);
+    };
+
+    return (
+        <div className="glass-panel p-6 rounded-2xl flex items-center gap-8">
+            <button
+                onClick={togglePlay}
+                className={`w-14 h-14 rounded-full flex items-center justify-center transition-all ${isPlaying
+                        ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                        : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                    }`}
+            >
+                {isPlaying ? <Square fill="currentColor" size={20} /> : <Play fill="currentColor" size={20} />}
+            </button>
+
+            <div className="flex-1 space-y-3">
+                <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2 text-white/60">
+                        <Activity size={14} />
+                        <span className="text-[10px] font-mono uppercase tracking-widest">Tempo</span>
+                    </div>
+                    <span className="text-sm font-mono text-emerald-400">{bpm} BPM</span>
+                </div>
+                <input
+                    type="range"
+                    min="40"
+                    max="240"
+                    value={bpm}
+                    onChange={handleBpmChange}
+                    className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                />
+            </div>
+        </div>
+    );
+};
+
+export default TransportCtrl;
