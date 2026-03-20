@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Play, Square, Activity } from 'lucide-react';
+import { Play, Square, Activity, SquareX } from 'lucide-react';
 import { engine } from '../services/AudioEngine';
 
 /**
  * TransportCtrl 组件：播放/停止控制与 BPM 调节
  */
 
-const TransportCtrl = ({ isPlaying, setIsPlaying }) => {
+const TransportCtrl = ({ isPlaying, setIsPlaying, onClear }) => {
     const [bpm, setBpm] = useState(120);
 
     const togglePlay = () => {
@@ -53,6 +53,16 @@ const TransportCtrl = ({ isPlaying, setIsPlaying }) => {
                     className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                 />
             </div>
+            <button
+                onClick={onClear}
+                className="flex items-center gap-2 px-4 py-2 text-[10px] font-mono uppercase tracking-widest text-red-400/60 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all group"
+            >
+                <SquareX
+                    size={16}
+                    className="group-hover:rotate-90 transition-transform duration-300"
+                />
+                <span>Clear Grid</span>
+            </button>
         </div>
     );
 };

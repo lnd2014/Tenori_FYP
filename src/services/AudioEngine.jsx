@@ -90,7 +90,6 @@ class AudioEngine {
   setFilterType(type) {
     if (this.filter) {
       this.filter.type = type;
-      console.log(this.filter.type);
     }
   }
 

@@ -102,17 +102,8 @@ const App = () => {
           <TransportCtrl
             isPlaying={isPlaying}
             setIsPlaying={setIsPlaying}
+            onClear={clearGrid} 
           />
-
-          <div className="grid lg:grid-cols-[1fr_350px] gap-12">
-            {/* TODO 把清除按钮的逻辑放入TransportCtrl中，并把图标依赖一起放过去，修改图标依赖的CSS */}
-            <button
-              onClick={clearGrid}
-              className="text-[10px] font-mono uppercase tracking-widest text-red-400 hover:text-red-300 transition-colors"
-            >
-              <SquareX fill="black" size={20} />Clear All
-            </button>
-          </div>
           
         </div>
 
