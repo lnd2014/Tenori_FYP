@@ -87,10 +87,34 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen p-8 max-w-7xl mx-auto">
+    <div className="min-h-screen p-8 max-w-[1600px] mx-auto"> {/* 修改：增加最大宽度以适应三列横向布局 */}
       <Header />
 
-      <div className="grid lg:grid-cols-[1fr_650px] gap-12 items-start">
+      {/* 将 lg:grid-cols-[1fr_650px] 改为三列布局 */}
+      {/* 第一列固定 256px (预设)，第二列自适应 (网格)，第三列固定 350px (控制器) */}
+      <div className="grid lg:grid-cols-[256px_1fr_350px] gap-8 items-start">
+
+        {/* 左侧列：放置预设面板 (PresetSelector) */}
+        <div className="w-full shrink-0">
+          <PresetSelector onSelect={handleLoadPreset} />
+          <div className='glass-panel p-6 rounded-2xl space-y-6'>
+            <div className="glass-panel p-6 rounded-2xl space-y-6">
+              <h2 className="text-xs font-mono uppercase tracking-widest text-white/60 mb-4">使用指南</h2>
+              <ul className="text-[11px] text-white/40 space-y-2 list-disc pl-4">
+                <li>使用 XY Pad 实时调制滤波器的截止频率，共鸣和类型。</li>
+                <li>点击网格上的方块来添加音符。</li>
+                <li>每个音符都会“记住”它被创建时的滤波器设置。</li>
+                <li>调整 BPM 滑块来改变序列的播放速度。</li>
+                <li>按播放按钮来播放和暂停，使用清除按钮清除网格</li>
+                <li>在左侧预设面板可以使用准备好的预设</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        
+
+        {/* 中央列：放置音乐网格与播放控制 (Grid & Transport) */}
         <div className="space-y-8">
           <Grid
             grid={grid}
@@ -98,39 +122,31 @@ const App = () => {
             currentStep={currentStep}
           />
 
-          {/* 播放按钮 */}
           <TransportCtrl
             isPlaying={isPlaying}
             setIsPlaying={setIsPlaying}
-            onClear={clearGrid} 
+            onClear={clearGrid}
           />
-          
         </div>
 
-        <div className="flex flex-row-reverse gap-6 items-start">
-          <div className="glass-panel p-6 rounded-2xl space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xs font-mono uppercase tracking-widest text-white/60">KAOSS Controller</h2>
-            </div>
-
-                {/* XY 触摸板：控制全局音色 */}
-                <XYPad />
-
-            <div className="p-4 bg-white/5 rounded-xl border border-white/5">
-              <p className="text-[11px] leading-relaxed text-white/40 italic">
-                Tip: Click a grid square to lock in the current XY Pad timbre.
-              </p>
-            </div>
-            
+        {/* 3. 右侧列：放置 XY 控制器 (XYPad) */}
+        <div className="glass-panel p-6 rounded-2xl space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs font-mono uppercase tracking-widest text-white/60">KAOSS Controller</h2>
           </div>
 
-          <div className="w-64 shrink-0"> {/* 给预设面板一个固定宽度，例如 16rem */}
-            <PresetSelector onSelect={handleLoadPreset} />
+          {/* XY 触摸板 */}
+          <XYPad />
+
+          <div className="p-4 bg-white/5 rounded-xl border border-white/5">
+            <p className="text-[11px] leading-relaxed text-white/40 italic">
+              Tip: Click a grid square to lock in the current XY Pad timbre.
+            </p>
           </div>
-
-
-          
         </div>
+
+        
+
       </div>
     </div>
   );
