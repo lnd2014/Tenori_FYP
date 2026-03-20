@@ -86,6 +86,14 @@ class AudioEngine {
     this.synth.triggerAttackRelease(note, '16n', time);
   }
 
+  // 设置滤波器类型
+  setFilterType(type) {
+    if (this.filter) {
+      this.filter.type = type;
+      console.log(this.filter.type);
+    }
+  }
+
   start() {
     Tone.start();
     Tone.getTransport().start();

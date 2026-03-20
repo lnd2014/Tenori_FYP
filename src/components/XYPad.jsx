@@ -5,6 +5,15 @@ const XYPad = () => {
   const padRef = useRef(null);
   const [pos, setPos] = useState({ x: 0.5, y: 0.5 });
   const [isDragging, setIsDragging] = useState(false);
+  // 滤波器类型变量
+  const filterTypes = ['lowpass', 'highpass', 'bandpass', 'notch'];
+  const [currentFilter, setCurrentFilter] = useState('lowpass');
+
+  // 管理滤波器类型变化
+  const handleFilterChange = (type) => {
+    setCurrentFilter(type);
+    engine.setFilterType(type);
+  };
 
   const handleMove = (e) => {
     if (!padRef.current) return;
@@ -69,7 +78,25 @@ const XYPad = () => {
           }}
         />
       </div>
+      <div className="space-y-4">
+        {/* 过滤器类型切换按钮组 */}
+        <div className="flex gap-2">
+          {filterTypes.map((type) => (
+            <button
+              key={type}
+              onClick={() => handleFilterChange(type)}
+              className={`px-3 py-1 text-[10px] font-mono uppercase tracking-tighter rounded-full border transition-all ${currentFilter === type
+                  ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.2)]'
+                  : 'bg-white/5 text-white/40 border-white/10 hover:bg-white/10'
+                }`}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
+    
   );
 };
 
