@@ -46,6 +46,9 @@ class AudioEngine {
     this.scale = [
       'C6', 'A5', 'G5', 'E5', 'D5', 'C5', 'A4', 'G4', 'E4', 'D4', 'C4', 'A3', 'G3', 'E3', 'D3', 'C3'
     ];
+
+    //设置是否是全局模式
+    this.isGlobalMode = false;
   }
 
   /**
@@ -63,7 +66,7 @@ class AudioEngine {
     const q = x * (15 - 0.5) + 0.5;        // X轴对应共振: 0.5 - 15
 
     // 更新当前音色缓存 (用于新音符的录入)
-    this.currentTimbre = { cutoff, q };
+     this.currentTimbre = { cutoff, q };
 
     // 实时更新全局滤波器
     // 确保 this.filter 已经正确连接到了 synth 和 destination
@@ -77,13 +80,21 @@ class AudioEngine {
     const note = this.scale[noteIndex];
     if (!note) return;
 
-    // Apply specific timbre for this note
-    if (timbre) {
+   
+    // 让 XY Pad 的全局设置具有最高优先级（像 setFilterType 一样全局生效），
+    // 添加一个判断：只有当“非全局覆盖”时才应用音符自带音色。
+    if (timbre && !this.isGlobalMode) {
+      // 只有在非全局模式下，才让每个音符恢复自己保存的音色
       this.filter.frequency.setValueAtTime(timbre.cutoff, time);
       this.filter.Q.setValueAtTime(timbre.q, time);
     }
-
     this.synth.triggerAttackRelease(note, '16n', time);
+  }
+
+  // 提供一个方法供外部切换全局模式
+  setGlobalMode(value) {
+    this.isGlobalMode = value;
+    console.log(`音色模式已切换为: ${value ? '全局 (Global)' : '音符 (Per-Note)'}`);
   }
 
   // 设置滤波器类型

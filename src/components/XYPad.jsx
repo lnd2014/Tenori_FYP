@@ -13,11 +13,20 @@ const XYPad = () => {
   // 滤波器类型变量
   const filterTypes = ['lowpass', 'highpass', 'bandpass', 'notch'];
   const [currentFilter, setCurrentFilter] = useState('lowpass');
+  // 设置全局模式
+  const [isGlobal, setIsGlobal] = useState(false);
 
   // 管理滤波器类型变化
   const handleFilterChange = (type) => {
     setCurrentFilter(type);
     engine.setFilterType(type);
+  };
+
+  // 管理全局模式变化
+  const toggleMode = () => {
+    const newMode = !isGlobal;
+    setIsGlobal(newMode);
+    engine.setGlobalMode(newMode); // 直接通知引擎
   };
 
   const handleMove = (e) => {
@@ -100,6 +109,14 @@ const XYPad = () => {
           ))}
         </div>
       </div>
+
+      <button
+        onClick={toggleMode}
+        className={`px-3 py-1 rounded text-[10px] font-mono transition-colors ${isGlobal ? 'bg-emerald-500 text-black' : 'bg-white/10 text-white/40'
+          }`}
+      >
+        {isGlobal ? 'GLOBAL MODE: ON' : 'GLOBAL MODE: OFF'}
+      </button>
     </div>
     
   );
