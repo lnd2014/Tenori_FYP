@@ -1,6 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { engine } from '../services/AudioEngine';
 
+/**
+ * XYPad 组件：KAOSS 风格的音色调制控制器
+ * X 轴控制共鸣 (Resonance/Q)，Y 轴控制截止频率 (Cutoff)
+ */
+
 const XYPad = () => {
   const padRef = useRef(null);
   const [pos, setPos] = useState({ x: 0.5, y: 0.5 });

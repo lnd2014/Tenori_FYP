@@ -2,6 +2,10 @@ import React from 'react';
 import NoteSquare from './NoteSquare.jsx';
 import { engine } from '../services/AudioEngine';
 
+/**
+ * Grid 组件：渲染 16x16 的交互式音乐网格
+ */
+
 const Grid = ({ grid, setGrid, currentStep }) => {
     const toggleNote = (col, row) => {
         const newGrid = [...grid];

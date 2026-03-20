@@ -6,6 +6,13 @@ import XYPad from './components/XYPad.jsx';
 import TransportCtrl from './components/TransportCtrl';
 import { engine } from './services/AudioEngine';
 import { SquareX } from 'lucide-react';
+import { PRESETS } from './constants/Presets';
+import PresetSelector from './components/PresetsSelector';
+
+/**
+ * App 根组件
+ * 负责协调网格状态、音频序列调度以及整体 UI 布局
+ */
 
 const App = () => {
   const [grid, setGrid] = useState(
@@ -50,11 +57,40 @@ const App = () => {
     );
   };
 
+  /**
+ * 加载预设并更新网格状态
+ * @param {string} presetName 预设名称
+ */
+  const handleLoadPreset = (presetName) => {
+    const coords = PRESETS[presetName];
+    if (!coords) return;
+
+    // 初始化为对象数组
+    const newGrid = Array(16).fill(null).map(() =>
+      Array(16).fill(null).map(() => ({ active: false, timbre: null }))
+    );
+
+    // 2. 根据坐标点亮格子
+    coords.forEach(([row, col]) => {
+      if (row < 16 && col < 16) {
+        // 修改对象的 active 属性
+        newGrid[row][col].active = true;
+
+        // 如果预设需要默认音色，也可以在这里设置
+        newGrid[row][col].timbre = null; 
+      }
+    });
+
+    console.log("预设加载成功，数据结构已同步:", newGrid[15][0]); // 应该显示 {active: true, ...}
+
+    setGrid(newGrid);
+  };
+
   return (
-    <div className="min-h-screen p-8 max-w-6xl mx-auto">
+    <div className="min-h-screen p-8 max-w-7xl mx-auto">
       <Header />
 
-      <div className="grid lg:grid-cols-[1fr_350px] gap-12 items-start">
+      <div className="grid lg:grid-cols-[1fr_650px] gap-12 items-start">
         <div className="space-y-8">
           <Grid
             grid={grid}
@@ -80,7 +116,7 @@ const App = () => {
           
         </div>
 
-        <div className="space-y-8">
+        <div className="flex flex-row-reverse gap-6 items-start">
           <div className="glass-panel p-6 rounded-2xl space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-xs font-mono uppercase tracking-widest text-white/60">KAOSS Controller</h2>
@@ -94,7 +130,13 @@ const App = () => {
                 Tip: Click a grid square to lock in the current XY Pad timbre.
               </p>
             </div>
+            
           </div>
+
+          <div className="w-64 shrink-0"> {/* 给预设面板一个固定宽度，例如 16rem */}
+            <PresetSelector onSelect={handleLoadPreset} />
+          </div>
+
 
           
         </div>

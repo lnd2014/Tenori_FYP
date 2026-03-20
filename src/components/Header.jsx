@@ -1,6 +1,10 @@
 import React from 'react';
 import { Music, Zap } from 'lucide-react';
 
+/**
+ * Header 组件：显示应用标题和引擎状态
+ */
+
 const Header = () => {
     return (
         <header className="flex items-center justify-between mb-8">

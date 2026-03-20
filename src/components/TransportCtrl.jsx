@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { Play, Square, Activity } from 'lucide-react';
 import { engine } from '../services/AudioEngine';
 
+/**
+ * TransportCtrl 组件：播放/停止控制与 BPM 调节
+ */
+
 const TransportCtrl = ({ isPlaying, setIsPlaying }) => {
     const [bpm, setBpm] = useState(120);
 
