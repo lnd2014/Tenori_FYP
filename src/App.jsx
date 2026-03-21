@@ -8,7 +8,7 @@ import { engine } from './services/AudioEngine';
 import { SquareX } from 'lucide-react';
 import { PRESETS } from './constants/Presets';
 import PresetSelector from './components/PresetsSelector';
-
+import FileActions from './components/FileActions.jsx';
 /**
  * App 根组件
  * 负责协调网格状态、音频序列调度以及整体 UI 布局
@@ -58,36 +58,61 @@ const App = () => {
   };
 
   /**
+ * 将坐标数组转换为 16x16 的对象网格状态，逻辑抽离方便复用
+ * @param {Array} coords - 格式为 [[row, col], [row, col], ...] 的数组
+ */
+  const loadGridData = (coords) => {
+    // 1. 生成全新的 16x16 基础结构（所有格子初始化为不激活）
+    const newGrid = Array(16).fill(null).map(() =>
+      Array(16).fill(null).map(() => ({
+        active: false,
+        timbre: null
+      }))
+    );
+
+    // 2. 填充激活状态
+    coords.forEach(([row, col]) => {
+      // 增加越界检查，增强健壮性
+      if (row >= 0 && row < 16 && col >= 0 && col < 16) {
+        newGrid[row][col].active = true;
+        // 注意：这里默认 timbre 为 null，如果你的上传文件包含音色，可以在此处扩展逻辑
+      }
+    });
+
+    // 3. 更新状态
+    setGrid(newGrid);
+  };
+  
+  /**
  * 加载预设并更新网格状态
  * @param {string} presetName 预设名称
  */
   const handleLoadPreset = (presetName) => {
     const coords = PRESETS[presetName];
-    if (!coords) return;
+    if (coords) {
+      loadGridData(coords); // 复用核心逻辑
+      console.log(`已加载预设: ${presetName}`);
+    }
+  };
 
-    // 初始化为对象数组
-    const newGrid = Array(16).fill(null).map(() =>
-      Array(16).fill(null).map(() => ({ active: false, timbre: null }))
-    );
-
-    // 2. 根据坐标点亮格子
-    coords.forEach(([row, col]) => {
-      if (row < 16 && col < 16) {
-        // 修改对象的 active 属性
-        newGrid[row][col].active = true;
-
-        // 如果预设需要默认音色，也可以在这里设置
-        newGrid[row][col].timbre = null; 
-      }
+  /**
+ * 将当前的 grid 状态导出为简单的坐标数组
+ * @returns {Array} [[row, col], ...]
+ */
+  const exportGridData = () => {
+    const coords = [];
+    grid.forEach((rowArr, rowIdx) => {
+      rowArr.forEach((cell, colIdx) => {
+        if (cell.active) {
+          coords.push([rowIdx, colIdx]);
+        }
+      });
     });
-
-    console.log("预设加载成功，数据结构已同步:", newGrid[15][0]); // 应该显示 {active: true, ...}
-
-    setGrid(newGrid);
+    return coords;
   };
 
   return (
-    <div className="min-h-screen p-8 max-w-[1600px] mx-auto"> {/* 修改：增加最大宽度以适应三列横向布局 */}
+    <div className="min-h-screen p-8 max-w-[1600px] mx-auto"> {/* 增加最大宽度以适应三列横向布局 */}
       <Header />
 
       {/* 将 lg:grid-cols-[1fr_650px] 改为三列布局 */}
@@ -114,7 +139,7 @@ const App = () => {
 
         
 
-        {/* 中央列：放置音乐网格与播放控制 (Grid & Transport) */}
+        {/* 中央列：放置音乐网格与播放控制 (Grid & Transport)与上传下载 */}
         <div className="space-y-8">
           <Grid
             grid={grid}
@@ -127,6 +152,14 @@ const App = () => {
             setIsPlaying={setIsPlaying}
             onClear={clearGrid}
           />
+
+          {/*调用file actions */}
+          <div>
+            <FileActions
+              onDownloadRequest={exportGridData}
+              onUpload={loadGridData}
+            />
+          </div>
         </div>
 
         {/* 3. 右侧列：放置 XY 控制器 (XYPad) */}
@@ -144,6 +177,8 @@ const App = () => {
             </p>
           </div>
         </div>
+
+        
 
         
 
