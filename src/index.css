@@ -5,6 +5,61 @@
     --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
+@media (max-width: 768px) {
+
+    /* 1. 根容器和主体：确保没有任何多余的边距 */
+    :root,
+    body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        /* 极其重要：防止因为格子微小的溢出导致页面左右晃动 */
+    }
+
+    /* 2. 外部面板 (glass-panel)：移除左右内边距和圆角 */
+    .glass-panel {
+        width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        border-radius: 0 !important;
+        /* 贴边显示时，移除圆角看起来更专业 */
+        border-left: none;
+        border-right: none;
+    }
+
+    /* 3. 网格容器 (grid-container)：实现“通栏”效果 */
+    .grid-container {
+        width: 100%;
+        max-width: 100vw;
+        padding: 8px 4px;
+        /* 减小上下内边距，左右内边距设为极小 */
+        gap: 2px;
+        /* 减小格子间的缝隙，为格子腾出更多空间 */
+        border-radius: 0;
+        /* 移动端贴边显示 */
+        border-left: none;
+        border-right: none;
+
+        /* 确保 16 列能挤进屏幕 */
+        display: grid;
+        grid-template-columns: repeat(16, 1fr);
+    }
+
+    /* 4. 格子 (note-square)：微调 */
+    .note-square {
+        border-radius: 2px;
+        /* 减小格子的圆角，使其在小屏幕上更清晰 */
+    }
+
+    /* 5. 其他控制按钮容器 */
+    .controls-panel {
+        padding: 16px 12px;
+        /* 移动端控制台保留适度边距，不要完全贴边 */
+        width: 100%;
+    }
+}
+
 :root {
     --bg: #0a0a0c;
     --panel: #151619;
