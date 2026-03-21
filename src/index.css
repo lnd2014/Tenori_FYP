@@ -11,7 +11,7 @@
     --accent: #00ff9d;
     --accent-secondary: #00d4ff;
     width: 100vw;
-    height: 100vh;
+    /*height: 100vh;*/
     display: flex;
     overflow: auto;/* 启用全局滚动 */
 }
@@ -20,7 +20,7 @@ body {
     background-color: var(--bg);
     color: white;
     margin: 0;
-    overflow: hidden;
+    overflow: auto;
     user-select: none;
 }
 
