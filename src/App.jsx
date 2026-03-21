@@ -126,9 +126,9 @@ const App = () => {
             <div className="glass-panel p-6 rounded-2xl space-y-6">
               <h2 className="text-xs font-mono uppercase tracking-widest text-white/60 mb-4">使用指南</h2>
               <ul className="text-[11px] text-white/40 space-y-2 list-disc pl-4">
-                <li>使用 KAOSS控制器 调制滤波器的截止频率，共鸣和类型。</li>
-                <li>点击网格上的方块来添加音符。</li>
-                <li>每个音符都会“记住”它被创建时的音色。如果你想演奏中即时用KAOSS修改音色，请打开全局模式。</li>
+                <li>使用 KAOSS控制器 调制滤波器的截止频率，共鸣和类型。如果你想演奏中即时用KAOSS修改音色，请打开全局模式。</li>
+                <li>点击网格上的方块来添加音符，再次点击点亮的音符会熄灭。</li>
+                <li>支持json格式的上传与下载，格式为 [[列],[行]]。</li>
                 <li>调整 BPM 滑块来改变序列的播放速度。</li>
                 <li>按播放按钮来播放和暂停，使用清除按钮清除网格</li>
                 <li>在左侧预设面板可以使用准备好的预设</li>
