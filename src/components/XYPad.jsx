@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { engine } from '../services/AudioEngine';
+import { RotateCcw } from 'lucide-react';
 
 /**
  * XYPad 组件：KAOSS 风格的音色调制控制器
@@ -28,6 +29,15 @@ const XYPad = () => {
     setIsGlobal(newMode);
     engine.setGlobalMode(newMode); // 直接通知引擎
   };
+
+  // 管理归中
+  const handleReset = () => {
+    // 中央数值
+    let x = 0.5, y = 0.5;
+    setPos({x, y});
+    // 实时更新音频引擎的音色参数
+    engine.updateTimbre(x, y);
+  }
 
   const handleMove = (e) => {
     if (!padRef.current) return;
@@ -107,16 +117,58 @@ const XYPad = () => {
               {type}
             </button>
           ))}
-        </div>
-      </div>
+      </div>       
+    </div>
+      
+      {/* 按键统一容器 */}
+      <div className="mt-8 flex items-center justify-start gap-3">
 
-      <button
-        onClick={toggleMode}
-        className={`px-3 py-1 rounded text-[10px] font-mono transition-colors ${isGlobal ? 'bg-emerald-500 text-black' : 'bg-white/10 text-white/40'
-          }`}
-      >
-        {isGlobal ? 'GLOBAL MODE: ON' : 'GLOBAL MODE: OFF'}
-      </button>
+        {/* 全局模式切换按钮：模拟硬件开关 */}
+        <button
+          onClick={toggleMode}
+          className={`
+      relative flex items-center gap-2 
+      px-4 py-2 rounded-lg
+      text-[10px] font-bold tracking-widest uppercase
+      transition-all duration-300
+      border
+      ${isGlobal
+              ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
+              : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10'
+            }
+    `}
+        >
+          {/* 增加一个状态指示灯（小圆点） */}
+          <span className={`w-1.5 h-1.5 rounded-full ${isGlobal ? 'bg-emerald-400 animate-pulse' : 'bg-white/20'}`} />
+          GLOBAL MODE: {isGlobal ? 'ON' : 'OFF'}
+        </button>
+
+        {/* 分隔线 */}
+        <div className="w-[1px] h-4 bg-white/10 mx-1" />
+
+        {/* 重置按钮*/}
+        <button
+          onClick={handleReset}
+          className="
+      flex items-center gap-2
+      px-4 py-2
+      bg-white/5 hover:bg-red-500/10    /* 悬停时透出淡淡红色 */
+      text-white/50 hover:text-red-400  /* 悬停时文字变红 */
+      border border-white/10 hover:border-red-500/30
+      rounded-lg
+      transition-all duration-200
+      text-[10px] font-bold tracking-widest uppercase
+      active:scale-95                   /* 点击反馈 */
+    "
+        >
+          <RotateCcw size={12} />
+          RESET
+        </button>
+      </div>
+     
+      
+
+
     </div>
     
   );
