@@ -10,7 +10,7 @@
     --panel: #151619;
     --accent: #00ff9d;
     --accent-secondary: #00d4ff;
-    width: 100vw;
+    width: 80vw;
     /*height: 100vh;*/
     display: flex;
     overflow: auto;/* 启用全局滚动 */
@@ -20,6 +20,7 @@ body {
     background-color: var(--bg);
     color: white;
     margin: 0;
+    
     overflow: auto;
     user-select: none;
 }
