@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://lnd2014.github.io/tenori_fyp",
+  "homepage": "https://lnd2014.github.io/Tenori_FYP",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

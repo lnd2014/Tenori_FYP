@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     // 为了配置github静态网页
-    base: '/tenori_fyp/',
+    base: '/Tenori_FYP/',
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
       // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
